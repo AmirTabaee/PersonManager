@@ -1,85 +1,70 @@
-import React , {Component} from 'react';
+import React , {useState} from 'react';
 import Persons from '../Person/Persons';
 import {ToastContainer , toast} from 'react-toastify';
 import simpleContext from '../context/context';
 import Header from './../common/Header';
 import AddNewPerson from '../Person/AddNewPerson';
 
-class App extends Component {
-    state={
-        persons : [{id:1 , fullname:"امیر علوی"}] ,
-        person : "" ,
-        showPersons : true
-    }
+const App = () => {
+    const [getPersons , setPersons] = useState([]);
+    const [getPerson , setPerson] = useState("");
+    const [getShowPersons , setShowPersons] = useState(true);
 
-    handleShowPersons = () => {
-        this.setState({showPersons : !this.state.showPersons});
-    }
+    const HandleShowPersons = () => {
+        setShowPersons(!getShowPersons);
+    };
 
-    handleDeletePerson = (id) => {
-        const persons = [...this.state.persons];
+    const handleDeletePerson = (id) => {
+        const persons = [...getPersons];
         const filteredPersons = persons.filter(p => p.id !== id);
-        this.setState({persons : filteredPersons});
+        setPersons(filteredPersons);
+    }
+
+    const handleEditPerson = (event , id) => {
+        const persons = [...getPersons];
         const personIndex = persons.findIndex(p => p.id ===id);
         const person = persons[personIndex];
-        toast.error(`${person.fullname} با موفقیت حذف شد` , {
-            position:'bottom-right',
-            closeOnClick:true
-        });
-    }
-
-    handleEditPerson = (event , id) =>{
-        const  {persons : allpersons} = this.state;
-        const personIndex = allpersons.findIndex( p => p.id === id);
-        const person = allpersons[personIndex];
         person.fullname = event.target.value;
-        allpersons[personIndex] = person;
-        const persons = [...allpersons];
-        this.setState({persons});
+        persons[personIndex] = person;
+        setPersons(persons);
     }
 
-    handleCreateNewPerson = () => {
-        const persons = [...this.state.persons];
+    const handleCreateNewPerson = (id) => {
+        const persons = [...getPersons];
         const person = {
-            id : Math.floor(Math.random() * 1000),
-            fullname : this.state.person
-        }
-        if(this.state.person !== "" && this.state.person !== " "){
+            id: Math.floor(Math.random() * 1000),
+            fullname: getPerson,
+        };
+        if(getPerson !== "" && getPerson !== " "){
             persons.push(person);
-            this.setState({persons , person:""});
-            toast.success(`${person.fullname} با موفقیت اضافه شد` ,{
-                    position:"top-right",
-                    closeOnClick:true
-                }
-            )
+            setPersons(persons);
+            setPerson("");
         }
     }
 
-    setPerson= (event) => {
-        this.setState({person : event.target.value});
+    const setSinglePerson = (event) => {
+        setPerson(event.target.value);
     }
 
-    render() { 
-        const {persons ,showPersons } = this.state;
+    return ( 
 
-        return (
-            <simpleContext.Provider value={{
-                state:this.state,
-                handleDeletePerson:this.handleDeletePerson,
-                handleEditPerson:this.handleEditPerson,
-                handleCreateNewPerson:this.handleCreateNewPerson,
-                setPerson:this.setPerson
-            }}>
-                <div className="rtl text-center">
-                    <Header/>
-                    <AddNewPerson/>
-                    <button onClick={this.handleShowPersons} className={`btn ${(persons.length > 0)? "btn-info" : "btn-danger"}`}>نمایش اشخاص</button>
-                    {(showPersons) ? <Persons/> : null}
-                    <ToastContainer/>
-                </div>
-            </simpleContext.Provider>
-        );
-    }
+        <simpleContext.Provider value={{
+            persons : getPersons,
+            person : getPerson,
+            handleDeletePerson : handleDeletePerson,
+            handleEditPerson: handleEditPerson,
+            handleCreateNewPerson : handleCreateNewPerson,
+            setPerson : setSinglePerson
+        }}>
+            <div className="rtl text-center">
+                <Header/>
+                <AddNewPerson/>
+                <button onClick={HandleShowPersons} className={`btn ${(getPersons.length > 0)? "btn-info" : "btn-danger"}`}>نمایش اشخاص</button>
+                {(getShowPersons) ? <Persons/> : null}
+                <ToastContainer/>
+            </div>
+        </simpleContext.Provider>
+     );
 }
  
 export default App;
