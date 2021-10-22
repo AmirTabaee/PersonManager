@@ -56,6 +56,7 @@ const App = () => {
         setPerson(event.target.value);
     }
 
+   
     return ( 
 
         <simpleContext.Provider value={{
