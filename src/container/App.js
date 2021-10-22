@@ -18,6 +18,12 @@ const App = () => {
         const persons = [...getPersons];
         const filteredPersons = persons.filter(p => p.id !== id);
         setPersons(filteredPersons);
+        const personIndex = persons.findIndex(p => p.id === id);
+        const person = persons[personIndex];
+        toast.error(`${person.fullname} با موفقیت حذف شد`,{
+            position : "bottom-right",
+            closeOnClick : true
+        })
     }
 
     const handleEditPerson = (event , id) => {
@@ -39,6 +45,10 @@ const App = () => {
             persons.push(person);
             setPersons(persons);
             setPerson("");
+            toast.success(`${person.fullname} با موفقیت اضافه شد` , {
+                position : "top-right",
+                closeOnClick : true
+            })
         }
     }
 
