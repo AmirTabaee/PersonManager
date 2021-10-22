@@ -5,8 +5,8 @@ import Person from "./Person";
 
 const Persons = () => {
     const context = useContext(simpleContext);
-    const {persons} = context.state;
-    const {handleDeletePerson , handleEditPerson} = context;
+    const { persons , handleDeletePerson , handleEditPerson} = context;
+    
     return persons.map((person) => (
         <Person
             key={person.id}

@@ -5,7 +5,7 @@ import simpleContext from '../context/context';
 const Header = () => {
     const context = useContext(simpleContext);
     
-    const {persons} = context.state;
+    const {persons} = context;
     const badgeStyle = [];
         if(persons.length > 3) badgeStyle.push("badge-success");
         if(persons.length <= 3) badgeStyle.push("badge-warning");
